@@ -137,16 +137,16 @@ export const POKEMON_VIDEO_MAP: Record<number, string> = {
 # Screenshots
 
 Main Pokédex Table
-![alt text](screenshots/pikedex.png)
+![](screenshots/pikadex.png)
 
 Pokémon Detail Panel
-![alt text](screenshots/pokemon-detail.png)
+![](screenshots/pokemon-detail.png)
 
 Team Builder
-![alt text](screenshots/Team-builder.png)
+![](screenshots/Team-builder.png)
 
 Dashboard
-![alt text](screenshots/dashboard.png)
+![](screenshots/dashboard.png)
 
 # Setup Instructions
 
