@@ -22,7 +22,7 @@ Pokédex built with Angular (standalone components + signals) featuring search, 
 - TypeScript
 
 # Architecture
-
+```bash
 src/app/
 ├── core/
 │   ├── graphql/
@@ -81,7 +81,7 @@ src/app/
 |   ├── team.model.ts
 |   ├── battle.model.ts
 |   ├── trainer.model.ts
-
+```
 # Data Flow
 
     PokemonStore (RxJS)
