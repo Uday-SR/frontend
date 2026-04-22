@@ -1,0 +1,149 @@
+<div class="p-4 md:p-6 space-y-6">
+
+  <!-- HEADER -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <h2 class="text-2xl font-bold">Pokédex</h2>
+
+    <input
+      class="px-4 py-2 w-full md:w-64 border rounded-xl"
+      placeholder="Search Pokémon..."
+      (input)="search.set($any($event.target).value)"
+    />
+  </div>
+
+  <!-- FILTERS -->
+  <div class="flex gap-3 flex-wrap">
+    <select class="px-3 py-2 border rounded-lg"
+      (change)="sortBy.set($any($event.target).value)">
+      <option value="name">Sort: Name</option>
+      <option value="id">Sort: ID</option>
+    </select>
+
+    <select class="px-3 py-2 border rounded-lg"
+      (change)="typeFilter.set($any($event.target).value)">
+      <option value="">All Types</option>
+      <option value="fire">Fire</option>
+      <option value="water">Water</option>
+      <option value="grass">Grass</option>
+    </select>
+  </div>
+
+  <!-- TABLE -->
+  <div class="bg-white rounded-2xl shadow overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-xs uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">Name</th>
+          <th class="px-4 py-3 text-left">Types</th>
+          <th class="px-4 py-3 text-left">Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (p of paginatedPokemon(); track p.id) {
+          <tr class="hover:bg-gray-50 cursor-pointer"
+              (click)="selectPokemon(p)">
+
+            <td class="px-4 py-3 capitalize">{{ p.name }}</td>
+
+            <td class="px-4 py-3 flex gap-2 flex-wrap">
+              @for (t of p.types; track t) {
+                <span class="px-2 py-1 text-xs rounded-full bg-blue-500 text-white">
+                  {{ t }}
+                </span>
+              }
+            </td>
+
+            <td class="px-4 py-3 font-semibold">
+              {{ p.stats.reduce((s, a) => s + a.value, 0) }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="flex justify-center gap-4">
+    <button (click)="prevPage()" class="px-4 py-2 bg-gray-200 rounded-lg">Prev</button>
+    <span>Page {{ page() }} / {{ totalPages() }}</span>
+    <button (click)="nextPage()" class="px-4 py-2 bg-gray-200 rounded-lg">Next</button>
+  </div>
+
+</div>
+
+<!-- DETAIL PANEL -->
+
+@if (selectedPokemon()) {
+
+  <div class="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
+       (click)="selectedPokemon.set(null)">
+  </div>
+
+  <div class="fixed top-0 right-0 h-full w-full sm:w-[420px]
+              bg-white z-50 p-6 overflow-y-auto shadow-2xl">
+
+    <button class="absolute top-4 right-4 text-xl"
+            (click)="selectedPokemon.set(null)">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold capitalize">
+      {{ selectedPokemon()?.name }}
+    </h2>
+
+    <p class="text-gray-500">#{{ selectedPokemon()?.id }}</p>
+
+    <!-- SPRITE -->
+    <div class="flex justify-center my-4">
+      <img class="w-32 h-32" [src]="selectedPokemon()?.sprite" />
+    </div>
+
+    <!-- TYPES -->
+    <div class="flex gap-2 justify-center flex-wrap mb-4">
+      @for (t of selectedPokemon()?.types ?? []; track t) {
+        <span class="px-3 py-1 rounded-full bg-gray-300 text-xs">
+          {{ t }}
+        </span>
+      }
+    </div>
+
+    <!-- STATS -->
+    <div class="bg-gray-50 p-4 rounded-xl">
+      @for (s of selectedPokemon()?.stats ?? []; track s.name) {
+        <div class="mb-2">
+          <div class="flex justify-between text-sm">
+            <span>{{ s.name }}</span>
+            <span>{{ s.value }}</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded">
+            <div class="h-2 bg-blue-500 rounded"
+                 [style.width.%]="s.value"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- RADAR -->
+    <div class="h-64 mt-4">
+      <canvas
+        baseChart
+        [data]="radarData()"
+        [options]="radarOptions"
+        type="radar"
+      ></canvas>
+    </div>
+
+    <!-- VIDEO -->
+    @if (videoUrl()) {
+      <div class="mt-4">
+        <iframe
+          class="w-full h-56 rounded-xl"
+          [src]="videoUrl()"
+          allowfullscreen>
+        </iframe>
+      </div>
+    }
+
+  </div>
+}

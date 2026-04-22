@@ -1,59 +1,169 @@
-# Frontend
+# Pokédex App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+Pokédex built with Angular (standalone components + signals) featuring search, filtering, pagination, stats visualization, and Pokémon detail insights with radar charts and media integration.
 
-## Development server
+# Features
+- Real-time search
+- Sorting (Name / ID / Stats)
+- Type filtering (Fire, Water, Grass, etc.)
+- Pagination system
+- Radar chart (stats visualization using Chart.js)
+- Pokémon detail panel (inline UI)
+- Video integration (YouTube map per Pokémon)
+- Cry audio playback
+- Fully reactive architecture using Angular Signals
+- Tailwind CSS UI
 
-To start a local development server, run:
+# Tech Stack
+- Angular (Standalone Components)
+- RxJS + Signals (toSignal, computed, effect)
+- Chart.js + ng2-charts
+- Tailwind CSS
+- TypeScript
 
-```bash
-ng serve
-```
+# Architecture
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+src/app/
+├── core/
+│   ├── graphql/
+│   │   ├── apollo.config.ts
+│   │
+│   ├── services/ 
+│   │   ├── pokemon.service.ts
+│   │   ├── trainer.service.ts
+│
+├── features/
+│   ├── pokedex/
+│   │   ├── pokedex.component.ts
+│   │   ├── pokedex.component.html
+│   │
+│   ├── pokemon-detail-panel/ 
+│   │   ├── pokemon-detail-panel.component.ts
+│   │   ├── pokemon-detail-panel.component.html
+│   │   ├── videoMap.ts
+|   |   
+|   ├── battle-dashboard/
+|   │   │   ├── battle-dashboard.component.ts
+|   │   │   ├── battle-dashboard.component.html
+|   |
+|   ├── battle-logs/
+│   │   ├── battle-logs.component.ts
+│   │   ├── battle-logs.component.html
+|   |
+|   ├── dashboard/
+│   │   ├── dashboard.component.ts
+│   │   ├── dashboard.component.html
+│   │
+│   ├── mutation-panel/ (optional legacy)
+│   │   ├── mutation-panel.component.ts
+│   │   ├── mutation-panel.component.html
+|   |   
+|   ├── team-builder/
+│   │   ├── team-builder.component.ts
+│   │   ├── team-builder.component.html
+|   |
+│   ├── teams/
+│   │   ├── teams.component.ts
+│   │   ├── teams.component.html
+|   |   
+|   ├── trainer-profile/
+│   │   ├── trainer-profile.component.ts
+│   │   ├── trainer-profile.component.html       
+│
+├── state/
+│   ├── pokemon.store.ts
+│   ├── pokemon.selectors.ts
+|   ├── trainer.store.ts
+│   ├── trainer.selectors.ts
+│
+├── interface/
+│   ├── pokemon.model.ts
+|   ├── team.model.ts
+|   ├── battle.model.ts
+|   ├── trainer.model.ts
 
-## Code scaffolding
+# Data Flow
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+    PokemonStore (RxJS)
+            ↓
+    selectFilteredSortedPokemon()
+            ↓
+    Signals (toSignal)
+            ↓
+    UI (Angular Template)
+            ↓
+    User Actions (search, filter, select)
+            ↓
+    Computed Signals update UI automatically
 
-```bash
-ng generate component component-name
-```
+# Key Design Decisions
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1.  Signals over Observables (UI layer)
+    UI state handled using signal() + computed()
+    Cleaner reactivity than RxJS in components
+2.  Store-based architecture
+    Centralized Pokémon state in PokemonStore
+    Selector layer handles filtering logic
+3.  Inline Detail Panel (no separate route)
+    Faster UX
+    No navigation overhead
 
-```bash
-ng generate --help
-```
+# Overlay-based UI
 
-## Building
+- Features Breakdown
+- Search + Filter
+    Instant filtering via reactive signals
+- Pagination
+    Client-side slicing with computed signals
+- Radar Chart
+    Stats visualization using Chart.js radar controller
+- Detail Panel
+    Shows:
+    Sprite
+    Types
+    Stats bars
+    Radar chart
+    Video Mapping System
 
-To build the project run:
+Each Pokémon can have an optional video:
 
-```bash
-ng build
-```
+export const POKEMON_VIDEO_MAP: Record<number, string> = {
+  1: "https://www.youtube.com/embed/xxxx",
+  4: "https://www.youtube.com/embed/yyyy",
+};
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+# Bonus Features Attempted
 
-## Running unit tests
+# Screenshots
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Main Pokédex Table
+/screenshots/pikedex.png
 
-```bash
-ng test
-```
+Pokémon Detail Panel
+/screenshots/pokemon-detail.png
 
-## Running end-to-end tests
+Team Builder
+/screenshots/Team-builder.png
 
-For end-to-end (e2e) testing, run:
+Dashboard
+/screenshots/dashboard.png
 
-```bash
-ng e2e
-```
+# Setup Instructions
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+1. Install dependencies
+    ```bash
+    npm install
+    ```
 
-## Additional Resources
+2. Run development server
+    ```bash
+    ng serve
+    ```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+App runs at:
+http://localhost:4200
+
+3. Run Mock Server
+    ```bash
+    npx json-graphql-server db.js --port 4000
+    ```

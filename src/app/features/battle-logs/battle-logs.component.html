@@ -1,0 +1,23 @@
+<div class="p-4 space-y-3">
+
+  <h2 class="text-xl font-bold">Battle Logs</h2>
+
+  <div class="space-y-2">
+    @for (log of logs(); track log.id) {
+      <div class="p-3 rounded-lg bg-gray-100">
+
+        <div class="flex justify-between">
+          <span class="font-medium">
+            {{ log.message }}
+          </span>
+
+          <span class="text-xs text-gray-500">
+            {{ log.date | date:'shortTime' }}
+          </span>
+        </div>
+
+      </div>
+    }
+  </div>
+
+</div>

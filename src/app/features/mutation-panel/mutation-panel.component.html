@@ -1,0 +1,49 @@
+<div class="bg-white p-4 rounded-xl shadow space-y-6">
+
+  <!-- TRAINER UPDATE -->
+  <div>
+    <h3 class="font-bold">Update Trainer</h3>
+
+    <input class="border p-1 w-full"
+           placeholder="Name"
+           [(ngModel)]="trainerName">
+
+    <input class="border p-1 w-full mt-2"
+           placeholder="Region"
+           [(ngModel)]="region">
+
+    <button class="bg-blue-500 text-white px-3 py-1 mt-2"
+            (click)="updateTrainer()">
+      Update Trainer
+    </button>
+  </div>
+
+  <!-- TEAM CREATE -->
+  <div>
+    <h3 class="font-bold">Create Team</h3>
+
+    <input class="border p-1 w-full"
+           placeholder="Team Name"
+           [(ngModel)]="teamName">
+
+    <button class="bg-green-500 text-white px-3 py-1 mt-2"
+            (click)="createTeam()">
+      Create Team
+    </button>
+  </div>
+
+  <!-- BATTLE LOG -->
+  <div>
+    <h3 class="font-bold">Log Battle</h3>
+
+    <input class="border p-1 w-full"
+           placeholder="Opponent"
+           [(ngModel)]="opponent">
+
+    <button class="bg-red-500 text-white px-3 py-1 mt-2"
+            (click)="logBattle()">
+      Add Battle
+    </button>
+  </div>
+
+</div>

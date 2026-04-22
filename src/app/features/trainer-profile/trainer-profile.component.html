@@ -1,0 +1,28 @@
+<div class="bg-white shadow-xl rounded-2xl p-6 max-w-md">
+
+  @if (trainer()) {
+    <div class="flex items-center gap-4">
+      <img
+        [src]="trainer()?.avatar_url"
+        class="w-16 h-16 rounded-full border"
+      />
+
+      <div>
+        <h2 class="text-xl font-bold">{{ trainer()?.name }}</h2>
+        <p class="text-gray-500">{{ trainer()?.region }}</p>
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+      <div class="bg-gray-100 p-3 rounded-lg">
+        🎖 Badges: {{ trainer()?.badge_count }}
+      </div>
+      <div class="bg-gray-100 p-3 rounded-lg">
+        🏆 Rank: {{ trainer()?.rank }}
+      </div>
+    </div>
+  } @else {
+    <p>Loading profile...</p>
+  }
+
+</div>

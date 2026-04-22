@@ -1,0 +1,42 @@
+<div class="min-h-screen bg-gray-100 p-4">
+
+  <!-- GRID -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-2rem)]">
+
+    <!-- LEFT PANEL -->
+    <div class="space-y-4 overflow-auto">
+
+      <div class="bg-white rounded-xl shadow p-3">
+        <app-trainer-profile></app-trainer-profile>
+      </div>
+
+      <div class="bg-white rounded-xl shadow p-3">
+        <app-teams></app-teams>
+      </div>
+
+    </div>
+
+    <!-- MIDDLE PANEL -->
+    <div class="bg-white rounded-xl shadow p-3 overflow-auto">
+      <app-battle-dashboard></app-battle-dashboard>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="bg-white rounded-xl shadow p-3 overflow-auto">
+
+      <div class="h-full flex flex-col">
+
+        <div class="font-bold mb-2">
+          Battle Logs
+        </div>
+
+        <div class="flex-1 overflow-y-auto">
+          <app-battle-logs></app-battle-logs>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

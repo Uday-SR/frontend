@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #ef5350;
+  color: white;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.links a {
+  margin-left: 12px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+.links a.active {
+  border-bottom: 2px solid white;
+}
+
+.container {
+  padding: 16px;
+}

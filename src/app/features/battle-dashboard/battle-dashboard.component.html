@@ -1,0 +1,23 @@
+<div class="p-4 space-y-4">
+
+  <h2 class="text-2xl font-bold">Battle Dashboard</h2>
+
+  <!-- CHART -->
+  <div class="bg-white p-4 rounded-xl shadow">
+    <canvas
+      baseChart
+      [data]="barChartData()"
+      [type]="'bar'"
+      [options]="barChartOptions">
+    </canvas>
+  </div>
+
+  <!-- ACTION -->
+  <button
+    class="px-4 py-2 bg-blue-500 text-white rounded-lg"
+    (click)="addBattle()"
+  >
+    Simulate Battle
+  </button>
+
+</div>

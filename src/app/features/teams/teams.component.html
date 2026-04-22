@@ -1,0 +1,38 @@
+<div class="space-y-3">
+
+  @for (team of teams(); track team.id) {
+
+    <div class="bg-zinc-900 p-3 rounded-xl flex justify-between items-center">
+
+      <!-- TEAM INFO -->
+      <div>
+        <div class="font-bold">{{ team.name }}</div>
+        <div class="text-sm text-zinc-400">
+          Pokémon: {{ team.pokemon_ids.length }}
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="flex gap-2">
+
+        <!-- EDIT -->
+        <button
+          class="px-2 py-1 bg-blue-500 rounded"
+          (click)="editTeam(team)">
+          Edit
+        </button>
+
+        <!-- DELETE -->
+        <button
+          class="px-2 py-1 bg-red-500 rounded"
+          (click)="deleteTeam(team.id)">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>
