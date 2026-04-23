@@ -1,3 +1,9 @@
+/**
+ * Handles creating and managing a Pokémon team,
+ * including adding/removing Pokémon, validating team rules,
+ * and storing the selected lineup for battles.
+*/
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -26,20 +32,20 @@ import {
 import { CommonModule } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray
+} from '@angular/cdk/drag-drop';
+
 import { TrainerStore } from '../../state/trainer.store';
 import { PokemonStore } from '../../state/pokemon.store';
 import { selectPokemonSearch } from '../../state/pokemon.selectors';
 
-/**
- * Handles creating and managing a Pokémon team,
- * including adding/removing Pokémon, validating team rules,
- * and storing the selected lineup for battles.
- */
-
 @Component({
   selector: 'app-team-builder',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DragDropModule],
   templateUrl: './team-builder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -49,13 +55,32 @@ export class TeamBuilderComponent {
   public trainerStore = inject(TrainerStore);
   private pokemonStore = inject(PokemonStore);
 
-  // SIGNALS
+  // TYPE COLORS
+  readonly typeColors: Record<string, string> = {
+    fire: 'bg-red-500',
+    water: 'bg-blue-500',
+    grass: 'bg-green-500',
+    electric: 'bg-yellow-400 text-black',
+    ice: 'bg-cyan-300 text-black',
+    fighting: 'bg-orange-700',
+    poison: 'bg-purple-500',
+    ground: 'bg-yellow-600',
+    flying: 'bg-indigo-400',
+    psychic: 'bg-pink-500',
+    bug: 'bg-lime-500',
+    rock: 'bg-stone-500',
+    ghost: 'bg-violet-700',
+    dragon: 'bg-indigo-700',
+    dark: 'bg-gray-800',
+    steel: 'bg-gray-400 text-black',
+    fairy: 'bg-pink-300 text-black'
+  };
 
+  // SIGNALS
   search = signal('');
   competitiveMode = signal(false);
 
   // FORM
-
   form = this.fb.group({
     name: [
       '',
@@ -74,11 +99,8 @@ export class TeamBuilderComponent {
     return this.form.get('pokemon') as FormArray;
   }
 
-  // AUTOCOMPLETE
-
-  debouncedSearch$ = toObservable(this.search).pipe(
-    debounceTime(300)
-  );
+  // SEARCH LOGIC
+  debouncedSearch$ = toObservable(this.search).pipe(debounceTime(300));
 
   filteredPokemon$ = selectPokemonSearch(
     this.pokemonStore.pokemon$,
@@ -95,15 +117,15 @@ export class TeamBuilderComponent {
       )
   );
 
-  // ADD / REMOVE POKEMON
-
+  // ADD POKEMON
   addPokemon(p: any) {
-    if (this.pokemonArray.length >= 6) return;
+    if (!p || this.pokemonArray.length >= 6) return;
 
     this.pokemonArray.push(
       this.fb.group({
         id: [p.id],
         name: [p.name],
+        types: [p.types],
         nickname: [''],
         item: [''],
         evs: this.fb.group({
@@ -121,10 +143,43 @@ export class TeamBuilderComponent {
   }
 
   removePokemon(index: number) {
-    this.pokemonArray.removeAt(index);
+    if (index >= 0 && index < this.pokemonArray.length) {
+      this.pokemonArray.removeAt(index);
+    }
   }
 
-  // VALIDATOR
+  // DRAG & DROP
+
+  drop(event: CdkDragDrop<any[]>) {
+
+    // 🔁 Reorder inside team
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        this.pokemonArray.controls,
+        event.previousIndex,
+        event.currentIndex
+      );
+      return;
+    }
+
+    //  From suggestions → team
+    const p = event.previousContainer.data[event.previousIndex];
+
+    if (!p) return;
+    if (this.pokemonArray.length >= 6) return;
+
+    this.addPokemon(p);
+  }
+
+  dropToRemove(event: CdkDragDrop<any[]>) {
+
+    // Only remove if dragged from team → trash
+    if (event.previousContainer !== event.container) {
+      this.removePokemon(event.previousIndex);
+    }
+  }
+
+  // VALIDATORS
 
   uniqueNameValidator(): AsyncValidatorFn {
     return (control: AbstractControl) => {
@@ -141,8 +196,6 @@ export class TeamBuilderComponent {
     };
   }
 
-  // TYPE WARNING
-
   typeWarning = computed(() => {
     const team = this.pokemonArray.value;
     if (!team.length) return null;
@@ -155,8 +208,6 @@ export class TeamBuilderComponent {
 
     return null;
   });
-
-  // EV VALIDATION
 
   evError = computed(() => {
     if (!this.competitiveMode()) return null;
@@ -172,7 +223,6 @@ export class TeamBuilderComponent {
   });
 
   // SUBMIT
-
   submit() {
     if (this.form.invalid || this.evError()) return;
 
@@ -192,7 +242,6 @@ export class TeamBuilderComponent {
   }
 
   // INIT
-
   constructor() {
     this.pokemonStore.fetchPokemon(100, 0);
 

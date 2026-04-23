@@ -46,9 +46,13 @@
 
             <td class="px-4 py-3 capitalize">{{ p.name }}</td>
 
+            <!-- 🔥 TYPE BADGES -->
             <td class="px-4 py-3 flex gap-2 flex-wrap">
               @for (t of p.types; track t) {
-                <span class="px-2 py-1 text-xs rounded-full bg-blue-500 text-white">
+                <span
+                  class="px-2 py-1 text-xs rounded-full text-white"
+                  [ngClass]="typeColors[t] || 'bg-gray-400'"
+                >
                   {{ t }}
                 </span>
               }
@@ -73,7 +77,6 @@
 </div>
 
 <!-- DETAIL PANEL -->
-
 @if (selectedPokemon()) {
 
   <div class="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
@@ -99,10 +102,13 @@
       <img class="w-32 h-32" [src]="selectedPokemon()?.sprite" />
     </div>
 
-    <!-- TYPES -->
+    <!-- 🔥 TYPES (DETAIL PANEL) -->
     <div class="flex gap-2 justify-center flex-wrap mb-4">
       @for (t of selectedPokemon()?.types ?? []; track t) {
-        <span class="px-3 py-1 rounded-full bg-gray-300 text-xs">
+        <span
+          class="px-3 py-1 rounded-full text-xs text-white"
+          [ngClass]="typeColors[t] || 'bg-gray-400'"
+        >
           {{ t }}
         </span>
       }

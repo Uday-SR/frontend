@@ -4,110 +4,123 @@
   class="max-w-3xl mx-auto p-6 space-y-6 bg-white shadow-xl rounded-2xl"
 >
 
-  <h2 class="text-2xl font-bold text-gray-800">⚡ Build Your Team</h2>
+  <h2 class="text-2xl font-bold">⚡ Build Your Team</h2>
 
   <!-- TEAM NAME -->
-  <div>
-    <label class="block text-sm font-medium text-gray-600">Team Name</label>
-    <input
-      formControlName="name"
-      class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-      placeholder="Enter team name..."
-    />
+  <input
+    formControlName="name"
+    placeholder="Team name"
+    class="w-full px-4 py-2 border rounded-lg"
+  />
 
-    @if (form.get('name')?.touched && form.get('name')?.invalid) {
-      <p class="text-red-500 text-sm mt-1">3–30 characters required</p>
-    }
-
-    @if (form.get('name')?.errors?.['nameTaken']) {
-      <p class="text-red-500 text-sm">Name already exists</p>
-    }
-  </div>
-
-  <!-- SEARCH -->
+  <!-- SEARCH + DRAG SOURCE -->
   <div class="relative">
     <input
       placeholder="Search Pokémon..."
-      class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+      class="w-full px-4 py-2 border rounded-lg"
       (input)="search.set($any($event.target).value)"
     />
 
-    <!-- Dropdown -->
     @if (suggestions().length > 0) {
-      <div class=" w-full bg-white border mt-1 rounded-lg shadow-lg h-60 overflow-auto ">
-
+      <div
+        cdkDropList
+        id="sourceList"
+        [cdkDropListData]="suggestions()"
+        [cdkDropListConnectedTo]="['teamList']"
+        class="bg-white border mt-1 rounded-lg shadow-lg h-60 overflow-auto"
+      >
         @for (p of suggestions(); track p.id) {
           <div
-            (click)="addPokemon(p)"
-            class="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
+            cdkDrag
+            [cdkDragData]="p"
+            class="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-grab active:cursor-grabbing"
           >
             <img [src]="p.sprite" class="w-10 h-10" />
-            <span class="capitalize font-medium">{{ p.name }}</span>
+            <span class="capitalize">{{ p.name }}</span>
 
+            <!-- TYPES -->
             <div class="ml-auto flex gap-1">
               @for (t of p.types; track t) {
-                <span class="text-xs px-2 py-1 bg-gray-200 rounded-full">
+                <span
+                  class="text-xs px-2 py-1 rounded-full text-white"
+                  [ngClass]="typeColors[t] || 'bg-gray-400'"
+                >
                   {{ t }}
                 </span>
               }
             </div>
           </div>
         }
-
       </div>
     }
   </div>
 
-  <!-- TEAM GRID -->
-  <div class="grid md:grid-cols-2 gap-4">
+  <!-- TEAM DROP ZONE -->
+  <div
+    cdkDropList
+    id="teamList"
+    [cdkDropListData]="pokemonArray.controls"
+    [cdkDropListConnectedTo]="['sourceList']"
+    (cdkDropListDropped)="drop($event)"
+    class="min-h-[180px] border-2 border-dashed border-blue-400 rounded-xl p-4 transition-all duration-200"
+    [ngClass]="{
+      'bg-blue-50': pokemonArray.length === 0,
+      'bg-white': pokemonArray.length > 0
+    }"
+  >
 
-    @for (p of pokemonArray.controls; track $index) {
-      <div
-        [formGroup]="$any(p)"
-        class="border rounded-xl p-4 shadow-sm bg-gray-50 space-y-2"
-      >
-
-        <div class="flex justify-between items-center">
-          <h3 class="font-semibold capitalize">{{ p.value.name }}</h3>
-          <button
-            type="button"
-            (click)="removePokemon($index)"
-            class="text-red-500 hover:text-red-700"
-          >
-            ✖
-          </button>
-        </div>
-
-        <input
-          formControlName="nickname"
-          placeholder="Nickname"
-          class="w-full px-2 py-1 border rounded"
-        />
-
-        <select
-          formControlName="item"
-          class="w-full px-2 py-1 border rounded"
-        >
-          <option value="">Item</option>
-          <option value="Leftovers">Leftovers</option>
-          <option value="Choice Band">Choice Band</option>
-        </select>
-
-        <!-- EVs -->
-        @if (competitiveMode()) {
-          <div formGroupName="evs" class="grid grid-cols-3 gap-2 mt-2">
-            <input formControlName="hp" type="number" placeholder="HP" class="border p-1 rounded"/>
-            <input formControlName="atk" type="number" placeholder="ATK" class="border p-1 rounded"/>
-            <input formControlName="def" type="number" placeholder="DEF" class="border p-1 rounded"/>
-            <input formControlName="spa" type="number" placeholder="SPA" class="border p-1 rounded"/>
-            <input formControlName="spd" type="number" placeholder="SPD" class="border p-1 rounded"/>
-            <input formControlName="spe" type="number" placeholder="SPE" class="border p-1 rounded"/>
-          </div>
-        }
-
+    <!-- EMPTY STATE -->
+    @if (pokemonArray.length === 0) {
+      <div class="text-center text-gray-400 py-10">
+        Drag Pokémon here to build your team (max 6)
       </div>
     }
 
+    <!-- TEAM GRID -->
+    <div class="grid md:grid-cols-2 gap-4">
+      @for (p of pokemonArray.controls; track $index) {
+        <div
+          cdkDrag
+          [formGroup]="$any(p)"
+          class="border rounded-xl p-4 bg-gray-50 shadow-sm cursor-grab active:cursor-grabbing"
+        >
+          <div class="flex justify-between items-center">
+            <strong class="capitalize">{{ p.value.name }}</strong>
+            <button
+              type="button"
+              (click)="removePokemon($index)"
+              class="text-red-500 hover:text-red-700"
+            >
+              ✖
+            </button>
+          </div>
+
+          <!-- TYPES -->
+          <div class="flex gap-1 mt-2 flex-wrap">
+            @for (t of p.value.types; track t) {
+              <span
+                class="text-xs px-2 py-1 rounded-full text-white"
+                [ngClass]="typeColors[t] || 'bg-gray-400'"
+              >
+                {{ t }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <!-- REMOVE ZONE -->
+  <div
+    cdkDropList
+    id="removeList"
+    [cdkDropListConnectedTo]="['teamList']"
+    (cdkDropListDropped)="dropToRemove($event)"
+    class="p-4 border-2 border-dashed border-red-400 text-center text-red-500 rounded-xl transition-all duration-200 hover:bg-red-50"
+  >
+    Drag Pokémon here to remove 
   </div>
 
   <!-- WARNINGS -->
@@ -123,50 +136,13 @@
     </div>
   }
 
-  <!-- MODE -->
-  <div class="flex items-center justify-between">
-    <label class="flex items-center gap-2">
-      <input
-        type="checkbox"
-        formControlName="competitive"
-        (change)="competitiveMode.set($any($event.target).checked)"
-      />
-      Competitive Mode
-    </label>
-
-    @if (competitiveMode()) {
-      <select formControlName="tier" class="border px-2 py-1 rounded">
-        <option value="OU">OU</option>
-        <option value="UU">UU</option>
-        <option value="RU">RU</option>
-        <option value="NU">NU</option>
-      </select>
-    }
-  </div>
-
   <!-- SUBMIT -->
   <button
     type="submit"
     [disabled]="form.invalid || !!evError()"
     class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
   >
-    Create Team 🚀
+    Create Team 
   </button>
-
-  <!-- TEAM LIST -->
-  <div>
-    <h3 class="text-lg font-semibold mt-6">Your Teams</h3>
-
-    <div class="grid md:grid-cols-2 gap-3 mt-3">
-      @for (team of (trainerStore.teams$ | async); track team.id) {
-        <div class="p-3 border rounded-lg shadow-sm bg-white">
-          <strong>{{ team.name }}</strong>
-          <p class="text-sm text-gray-500">
-            {{ team.pokemon_ids.length }} Pokémon
-          </p>
-        </div>
-      }
-    </div>
-  </div>
 
 </form>

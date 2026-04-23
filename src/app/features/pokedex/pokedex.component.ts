@@ -20,12 +20,6 @@ import { selectFilteredSortedPokemon } from '../../state/pokemon.selectors';
 import { Pokemon } from '../../interface/pokemon.model';
 import { POKEMON_VIDEO_MAP } from './videoMap.component';
 
-/**
- * Manages Pokémon listing logic,
- * including fetching data, search, filtering, sorting,
- * pagination, and selecting a Pokémon for detailed view.
-*/
-
 @Component({
   selector: 'app-pokedex',
   standalone: true,
@@ -48,6 +42,27 @@ export class PokedexComponent {
   readonly selectedPokemon = signal<Pokemon | null>(null);
 
   readonly loading = toSignal(this.store.loading$, { initialValue: false });
+
+  // 🔥 TYPE COLOR MAP
+  readonly typeColors: Record<string, string> = {
+    fire: 'bg-red-500',
+    water: 'bg-blue-500',
+    grass: 'bg-green-500',
+    electric: 'bg-yellow-400 text-black',
+    ice: 'bg-cyan-300 text-black',
+    fighting: 'bg-orange-700',
+    poison: 'bg-purple-500',
+    ground: 'bg-yellow-600',
+    flying: 'bg-indigo-400',
+    psychic: 'bg-pink-500',
+    bug: 'bg-lime-500',
+    rock: 'bg-stone-500',
+    ghost: 'bg-violet-700',
+    dragon: 'bg-indigo-700',
+    dark: 'bg-gray-800',
+    steel: 'bg-gray-400 text-black',
+    fairy: 'bg-pink-300 text-black'
+  };
 
   private filtered$ = selectFilteredSortedPokemon(
     this.store.pokemon$,

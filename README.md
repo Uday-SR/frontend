@@ -134,6 +134,11 @@ export const POKEMON_VIDEO_MAP: Record<number, string> = {
 
 # Bonus Features Attempted
 
+Drag-and-Drop Team Builder
+
+Uses @angular/cdk/drag-drop to let users drag Pokémon from the Pokédex list into team slots (6 max). Dragging out removes them. Animate card insertion/removal. Show type coverage updating in real time as the team composition changes.
+
+
 # Screenshots
 
 Main Pokédex Table
@@ -143,7 +148,7 @@ Pokémon Detail Panel
 ![](screenshots/pokemon-detail.png)
 
 Team Builder
-![](screenshots/Team-builder.png)
+![](screenshots/team-builder.png)
 
 Dashboard
 ![](screenshots/dashboard.png)
