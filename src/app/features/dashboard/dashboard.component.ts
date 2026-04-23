@@ -1,3 +1,10 @@
+/**
+ * Acts as the main overview page,
+ * showing key stats, recent activity, and quick navigation
+ * to core features like battles, teams, and Pokédex.
+*/
+
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -16,12 +23,6 @@ import { TrainerProfileComponent } from '../trainer-profile/trainer-profile.comp
 import { TeamsComponent } from '../teams/teams.component';
 import { BattleLogsComponent } from '../battle-logs/battle-logs.component';
 import { BattleDashboardComponent } from '../battle-dashboard/battle-dashboard.component';
-
-/**
- * Acts as the main overview page,
- * showing key stats, recent activity, and quick navigation
- * to core features like battles, teams, and Pokédex.
-*/
 
 @Component({
   selector: 'app-dashboard',

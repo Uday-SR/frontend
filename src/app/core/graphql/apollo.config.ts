@@ -1,14 +1,14 @@
+/**
+ * Configures Apollo Client for GraphQL,
+ * including API endpoint, caching strategy, and auth headers.
+*/
+
 import { ApplicationConfig } from '@angular/core';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
 import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-
-/**
- * Configures Apollo Client for GraphQL,
- * including API endpoint, caching strategy, and auth headers.
-*/
 
 export const apolloConfig: ApplicationConfig = {
   providers: [

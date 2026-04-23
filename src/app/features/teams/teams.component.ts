@@ -1,13 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { TrainerStore } from '../../state/trainer.store';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Team } from '../../interface/team.model';
-
 /**
  * Displays the user's saved Pokémon team,
  * showing selected members, their stats, and allowing basic
  * actions like viewing details or managing the lineup.
 */
+
+import { Component, inject } from '@angular/core';
+import { TrainerStore } from '../../state/trainer.store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Team } from '../../interface/team.model';
 
 @Component({
   selector: 'app-teams',

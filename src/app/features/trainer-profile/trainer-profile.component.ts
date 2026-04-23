@@ -1,3 +1,8 @@
+/**
+ * Displays and manages trainer details,
+ * including profile info, stats, achievements, and progress history.
+*/
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -7,11 +12,6 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { TrainerStore } from '../../state/trainer.store';
-
-/**
- * Displays and manages trainer details,
- * including profile info, stats, achievements, and progress history.
-*/
 
 @Component({
   selector: 'app-trainer-profile',

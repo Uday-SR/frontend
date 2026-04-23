@@ -1,12 +1,12 @@
-import { Component, inject } from '@angular/core';
-import { TrainerStore } from '../../state/trainer.store';
-import { FormsModule } from '@angular/forms';
-
 /**
  * Handles UI and logic for applying
  * and previewing Pokémon mutations, including stat changes,
  * type changes, and transformation effects.
 */
+
+import { Component, inject } from '@angular/core';
+import { TrainerStore } from '../../state/trainer.store';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mutations-panel',

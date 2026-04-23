@@ -1,13 +1,14 @@
+/**
+ * Service for fetching Pokémon data using GraphQL (Apollo).
+ * Converts raw API response into frontend-ready models.
+*/
+
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
 import gql from 'graphql-tag';
 import { Pokemon } from '../../interface/pokemon.model';
 
-/**
- * Service for fetching Pokémon data using GraphQL (Apollo).
- * Converts raw API response into frontend-ready models.
- */
 const GET_POKEMON = gql`
   query GetPokemon($limit: Int, $offset: Int) {
     pokemon_v2_pokemon(limit: $limit, offset: $offset) {

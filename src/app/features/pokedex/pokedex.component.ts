@@ -1,3 +1,14 @@
+/**
+ * Displays a searchable, filterable, and paginated list of Pokémon.
+ * Allows users to:
+ * - Search Pokémon by name
+ * - Filter by type
+ * - Sort by name or ID
+ * - View detailed stats in a side panel
+ * - Visualize stats using a radar chart
+ * - Watch Pokémon-related videos
+*/
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -43,7 +54,7 @@ export class PokedexComponent {
 
   readonly loading = toSignal(this.store.loading$, { initialValue: false });
 
-  // 🔥 TYPE COLOR MAP
+  // TYPE COLOR MAP
   readonly typeColors: Record<string, string> = {
     fire: 'bg-red-500',
     water: 'bg-blue-500',

@@ -1,3 +1,9 @@
+/**
+ * Handles all trainer-related logic like
+ * creating, updating, and fetching trainer data from API or store.
+*/
+
+
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { map, Observable, catchError, of } from 'rxjs';
@@ -5,11 +11,6 @@ import { map, Observable, catchError, of } from 'rxjs';
 import { Team } from '../../interface/team.model';
 import { Battle } from '../../interface/battle.model';
 import { Trainer } from '../../interface/trainer.model';
-
-/**
- * Handles all trainer-related logic like
- * creating, updating, and fetching trainer data from API or store.
-*/
 
 /* Queries */
 
